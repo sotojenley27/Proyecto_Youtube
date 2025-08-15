@@ -1,0 +1,60 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crear canal - YouTube Grupo1</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+
+<header>
+  <div class="logo">YouTube <span>Grupo1</span></div>
+  <div style="margin-left:auto"></div>
+  <button class="btn outline" onclick="logout()">Salir</button>
+</header>
+<div class="container">
+  <aside>
+    <div style="margin-bottom:8px;font-weight:700" id="side-name">Mi Canal</div>
+    <a href="home.html">🏠 Home</a>
+    <a href="subir_video.html">➕ Subir video</a>
+    <a href="crear_canal.html">✨ Crear/Editar canal</a>
+    <a href="mi_canal.html">📄 Mi canal</a>
+  </aside>
+  <main>
+
+<h2>Crear / Editar canal</h2>
+<form class="form" id="cform">
+  <div><label>Nombre del canal</label><input name="name" required></div>
+  <div><label>Color principal</label><input name="color" type="color" value="#e50914"></div>
+  <div><label>Descripción</label><textarea name="about"></textarea></div>
+  <div><label>Banner (sube imagen)</label><input type="file" accept="image/*" name="banner"></div>
+  <div><label>Avatar (sube imagen)</label><input type="file" accept="image/*" name="avatar"></div>
+  <button class="btn">Guardar canal</button>
+</form>
+
+  </main>
+</div>
+<script src="script.js"></script>
+
+<script>
+  const me=requireAuth(); if(!me){}; fillSidebar(me);
+  const c = getChannel(me);
+  const form = document.getElementById('cform');
+  if(c){
+    form.name.value = c.name || '';
+    if(c.color) form.color.value = c.color;
+    form.about.value = c.about || '';
+  }
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const about = form.about.value.trim();
+    const color = form.color.value;
+    let banner = c?.banner || 'img/banner_default.jpg';
+    let avatar = c?.avatar || '';
+    if(form.banner.files[0]) banner = await fileToDataURL(form.banner.files[0]);
+    if(form.avatar.files[0]) avatar = await fileToDataURL(form.avatar.files[0]);
+    saveChannel(me, {name, about, color, banner, avatar});
+    alert('Canal guardado');
+    location.href = 'mi_canal.html';
+  });
+</script>
+</body></html>

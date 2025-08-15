@@ -1,0 +1,78 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subir video - YouTube Grupo1</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+
+<header>
+  <div class="logo">YouTube <span>Grupo1</span></div>
+  <div style="margin-left:auto"></div>
+  <button class="btn outline" onclick="logout()">Salir</button>
+</header>
+<div class="container">
+  <aside>
+    <div style="margin-bottom:8px;font-weight:700" id="side-name">Mi Canal</div>
+    <a href="home.html">🏠 Home</a>
+    <a href="subir_video.html">➕ Subir video</a>
+    <a href="crear_canal.html">✨ Crear/Editar canal</a>
+    <a href="mi_canal.html">📄 Mi canal</a>
+  </aside>
+  <main>
+
+<h2>Crear / Subir video</h2>
+<form class="form" id="vform">
+  <div><label>Título</label><input name="title" required placeholder="Mi video"></div>
+  <div><label>Descripción</label><textarea name="desc" placeholder="De qué trata..."></textarea></div>
+  <div><label>Miniatura (URL o dejar vacío)</label><input name="thumb" placeholder="https://...jpg"></div>
+  <div>
+    <label>Fuente del video</label>
+    <select name="stype">
+      <option value="yt">URL de YouTube (embed)</option>
+      <option value="url">Enlace directo .mp4/.webm</option>
+      <option value="file">Archivo local</option>
+    </select>
+    <input name="src" placeholder="https://www.youtube.com/embed/ID o https://...mp4">
+    <input type="file" name="file" accept="video/*" style="display:none">
+  </div>
+  <button class="btn">Guardar</button>
+</form>
+
+  </main>
+</div>
+<script src="script.js"></script>
+
+<script>
+  const me = requireAuth(); if(!me){}; fillSidebar(me);
+  const form = document.getElementById('vform');
+  form.stype.addEventListener('change', ()=>{
+    const isFile = form.stype.value==='file';
+    form.file.style.display = isFile ? 'block' : 'none';
+    form.src.style.display = isFile ? 'none' : 'block';
+  });
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const fd = new FormData(form);
+    let src = '';
+    if(fd.get('stype')==='file'){
+      const file = form.file.files[0];
+      if(!file){ alert('Selecciona un archivo'); return; }
+      src = URL.createObjectURL(file);
+    }else{
+      src = fd.get('src').trim();
+    }
+    const ch = getChannel(me);
+    const payload = {
+      id: uid(),
+      title: fd.get('title').trim(),
+      desc: fd.get('desc').trim(),
+      thumb: fd.get('thumb').trim() || 'img/thumb_default.jpg',
+      src,
+      channel: ch?.name || me,
+      views: 0
+    };
+    addVideo(me, payload);
+    location.href = 'ver_video.html?id=' + encodeURIComponent(payload.id);
+  });
+</script>
+</body></html>

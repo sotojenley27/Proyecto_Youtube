@@ -1,0 +1,34 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ingresar - YouTube Grupo1</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header><div class="logo">YouTube <span>Grupo1</span></div></header>
+<main style="max-width:720px;margin:20px auto;padding:0 16px">
+  <h2>Iniciar sesión</h2>
+  <form class="form" id="loginForm">
+    <div>
+      <label>Usuario</label>
+      <input name="u" required placeholder="Ej: Grupo2">
+    </div>
+    <div>
+      <label>Contraseña</label>
+      <input name="p" type="password" required>
+    </div>
+    <button class="btn" style="margin-top:8px">Entrar</button>
+    <p class="meta">¿No tienes cuenta? <a class="link" href="registro.html">Regístrate</a></p>
+  </form>
+</main>
+<script src="script.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const u = e.target.u.value.trim();
+    const p = e.target.p.value;
+    const r = loginUser(u,p);
+    if(!r.ok){ alert(r.msg); return; }
+    location.href = 'home.html';
+  });
+</script>
+</body></html>

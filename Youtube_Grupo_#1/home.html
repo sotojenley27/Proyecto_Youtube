@@ -1,0 +1,46 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home - YouTube Grupo1</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+
+<header>
+  <div class="logo">YouTube <span>Grupo1</span></div>
+  <div style="margin-left:auto"></div>
+  <button class="btn outline" onclick="logout()">Salir</button>
+</header>
+<div class="container">
+  <aside>
+    <div style="margin-bottom:8px;font-weight:700" id="side-name">Mi Canal</div>
+    <a href="home.html">🏠 Home</a>
+    <a href="subir_video.html">➕ Subir video</a>
+    <a href="crear_canal.html">✨ Crear/Editar canal</a>
+    <a href="mi_canal.html">📄 Mi canal</a>
+  </aside>
+  <main>
+
+<h2>Home</h2>
+<div class="grid" id="grid"></div>
+
+  </main>
+</div>
+<script src="script.js"></script>
+
+<script>
+  const me = requireAuth(); if(!me){}; fillSidebar(me);
+  const grid = document.getElementById('grid');
+  allVideos().forEach(v=>{
+    const a = document.createElement('a');
+    a.href = 'ver_video.html?id=' + encodeURIComponent(v.id);
+    a.className = 'card';
+    a.innerHTML = `
+      <img class="thumb" src="${v.thumb}" alt="thumb">
+      <div class="card-body">
+        <div class="title">${v.title}</div>
+        <div class="meta">${v.channel} • <span class="badge">${fmtViews(v.views||0)} vistas</span></div>
+      </div>`;
+    grid.appendChild(a);
+  });
+</script>
+</body></html>

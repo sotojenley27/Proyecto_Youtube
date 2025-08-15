@@ -1,0 +1,29 @@
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registro - YouTube Grupo1</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header><div class="logo">YouTube <span>Grupo1</span></div></header>
+<main style="max-width:720px;margin:20px auto;padding:0 16px">
+  <h2>Crear usuario</h2>
+  <form class="form" id="regForm">
+    <div><label>Usuario</label><input name="u" required></div>
+    <div><label>Contraseña</label><input name="p" type="password" required></div>
+    <button class="btn" style="margin-top:8px">Registrar</button>
+    <p class="meta">Ya tengo cuenta: <a class="link" href="index.html">Ingresar</a></p>
+  </form>
+</main>
+<script src="script.js"></script>
+<script>
+document.getElementById('regForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const u = e.target.u.value.trim();
+  const p = e.target.p.value;
+  const r = registerUser(u,p);
+  if(!r.ok){ alert(r.msg); return; }
+  alert('Usuario creado. Inicia sesión.');
+  location.href = 'index.html';
+});
+</script>
+</body></html>
